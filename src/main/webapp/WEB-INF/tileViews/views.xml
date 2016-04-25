@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+	<definition name="homepage" extends="base.definition">
+		<put-attribute name="header" value="/WEB-INF/tileViews/header.jsp"></put-attribute>
+		<put-attribute name="body" value="/WEB-INF/tileViews/body.jsp"></put-attribute>
+		<put-attribute name="leftcolumn" value="/WEB-INF/tileViews/leftcolumn.jsp"></put-attribute>
+		<put-attribute name="rightcolumn" value="/WEB-INF/tileViews/rightcolumn.jsp"></put-attribute>
+	</definition>
+
+</tiles-definitions>
