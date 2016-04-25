@@ -1,6 +1,9 @@
 package com.neu.qask.controller;
 
    
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -28,15 +31,18 @@ public class AddUserFormController {
 	}
 
 	@RequestMapping(value ="/adduser.htm" , method = RequestMethod.POST)
-	protected String doSubmitAction(@ModelAttribute("user") User user, BindingResult result) throws Exception {
+	protected String doSubmitAction(@ModelAttribute("user") User user, BindingResult result, HttpServletRequest req) throws Exception {
 		validator.validate(user, result);
 		if (result.hasErrors()) {
 			return "index";
 		}
-
+		HttpSession session = req.getSession();
 		try {
 			UserDAO userDao = new UserDAO();
-			userDao.create(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName());
+			User userCreated = userDao.create(user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName());
+			if(userCreated!=null){
+				session.setAttribute("sessionUser", userCreated);
+            }
 		} catch (AdException e) {
 			System.out.println("Exception: " + e.getMessage());
 		}

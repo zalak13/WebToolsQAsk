@@ -7,13 +7,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -21,13 +20,13 @@ import javax.persistence.Transient;
 @Table(name="questionbank")
 public class Question {
 
-	@Id @GeneratedValue
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="questionid", unique = true, nullable = false)
-    private long id;
+    private long questionid;
 	
-	@Transient
+	/*@Transient
 	private Set<Topic> topics = new HashSet<Topic>(0);
-	
+	*/
 	@Column(name="title")
     private String title;
 	
@@ -39,6 +38,9 @@ public class Question {
 	
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "Question_Topic", joinColumns = { @JoinColumn(name = "questionid") }, inverseJoinColumns = { @JoinColumn(name = "topicid") })
+	private Set<Topic> topics = new HashSet<Topic>();
+	//private Set<Meeting> meetings = new HashSet<Meeting>();
+	
 	public Set<Topic> getTopics() {
 		return this.topics;
 	}
@@ -47,9 +49,9 @@ public class Question {
 		this.topics = topics;
 	}
 	
-    @OneToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+/*    @OneToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	@JoinColumn(name="user")
-    private User user;
+    private User user;*/
     
     @Transient //
     private Map<Answer,User> answerDetails; 
@@ -58,7 +60,6 @@ public class Question {
     public Question(String title, String message, User user) {
         this.title = title;
         this.message = message;
-        this.user = user;
         this.postedby = user.getUserName();
     }
 
@@ -81,20 +82,12 @@ public class Question {
         this.title = title;
     }
 
-    public User getUser() {
-        return user;
+    protected long getQuestionId() {
+        return questionid;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    protected long getId() {
-        return id;
-    }
-
-    protected void setId(long id) {
-        this.id = id;
+    protected void setQuestionId(long id) {
+        this.questionid = id;
     }
 
 	public String getPostedBy() {

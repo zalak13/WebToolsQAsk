@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.neu.qask.dao.QuestionDAO;
 import com.neu.qask.dao.TopicDAO;
 import com.neu.qask.dao.UserDAO;
 import com.neu.qask.exception.AdException;
+import com.neu.qask.pojo.Question;
 import com.neu.qask.pojo.Topic;
 import com.neu.qask.pojo.User;
 
@@ -60,6 +62,42 @@ public class AJAXController {
 	                JSONObject item = new JSONObject();
 	                item.put("topicId", topic.getId());
 	                item.put("topicName", topic.getTopicname());
+	                array.put(item);
+	            }
+			 jsonResult.put("results", array);
+			 String message = jsonResult.toString();
+				PrintWriter out;
+	            if (message!="") {
+	                out = resp.getWriter();
+	                out.write(message);
+	            }
+			 	
+		} catch (AdException e) {
+			System.out.println("Exception: " + e.getMessage());
+		} catch(JSONException e){
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	
+	
+	@RequestMapping(value ="/getTopQuestionsList.htm" , method = RequestMethod.GET)
+	protected String getTopQuestionsList(@ModelAttribute("user") User user ,HttpServletRequest req ,HttpServletResponse resp) throws Exception {
+		List<Question> questionBank = new ArrayList<Question>();
+		JSONObject jsonResult = new JSONObject();
+		try {
+			JSONArray array = new JSONArray();
+			QuestionDAO questionDao = new QuestionDAO();
+			questionBank = questionDao.getQuestionlist();
+			 for (Question question: questionBank) {
+				 System.out.println(question);
+	                JSONObject item = new JSONObject();
+	                item.put("questionTitle", question.getTitle());
+	                item.put("questionDesc", question.getMessage());
+	                item.put("postedBy", question.getPostedBy());
+	                item.put("Answerdetails", question.getAnswerDetails());
 	                array.put(item);
 	            }
 			 jsonResult.put("results", array);

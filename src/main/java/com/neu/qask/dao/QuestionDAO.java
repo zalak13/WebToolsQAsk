@@ -9,6 +9,7 @@ import org.hibernate.Query;
 
 import com.neu.qask.exception.AdException;
 import com.neu.qask.pojo.Question;
+import com.neu.qask.pojo.Topic;
 import com.neu.qask.pojo.User;
 
 
@@ -32,14 +33,14 @@ public class QuestionDAO extends DAO {
         }
     }
 
-    public Question create(String title, String message, User user)
+    public Question create(String title, String message, User user ,List<Topic> topicList)
             throws AdException {
         try {
             begin();
             System.out.println("inside Question DAO");
             Question question=new Question( title, message, user);
+            question.getTopics().addAll(topicList);
             getSession().save(question);
-            
             commit();
             return question;
         } catch (HibernateException e) {
@@ -48,18 +49,19 @@ public class QuestionDAO extends DAO {
         }
     }
     
-//    public List list() throws AdException {
-//        try {
-//            begin();
-//            Query q = getSession().createQuery("from Question");
-//            List list = q.list();
-//            commit();
-//            return list;
-//        } catch (HibernateException e) {
-//            rollback();
-//            throw new AdException("Could not list the Questions", e);
-//        }
-//    }
+    
+    public List<Question> getQuestionlist() throws AdException {
+        try {
+            begin();
+            Query q = getSession().createQuery("from Question");
+            List<Question> getlist = q.list();
+            commit();
+            return getlist;
+        } catch (HibernateException e) {
+            rollback();
+            throw new AdException("Could not list the Questions", e);
+        }
+    }
 
     public void save(Question question) throws AdException {
         try {

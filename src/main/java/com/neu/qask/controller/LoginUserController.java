@@ -2,6 +2,9 @@ package com.neu.qask.controller;
 
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,15 +22,17 @@ public class LoginUserController {
 	
 
 	@RequestMapping(value ="/loginuser.htm" , method = RequestMethod.POST)
-	protected String doSubmitAction(@ModelAttribute("user") User user, BindingResult result,Model model) throws Exception {
-		Boolean userFound=false;
+	protected String doSubmitAction(@ModelAttribute("user") User user, BindingResult result,Model model, HttpServletRequest req) throws Exception {
+		//Boolean userFound=false;
+		HttpSession session = req.getSession();
 		try {
 			UserDAO userDao = new UserDAO();
-			userFound = userDao.checkUser(user.getEmail(), user.getPassword());
+			User userFound = userDao.checkUser(user.getEmail(), user.getPassword());
 			System.out.print(userFound);
-			if(userFound){
-			return "homepage";
-			}
+			if(userFound!=null){
+				session.setAttribute("sessionUser", userFound);
+            	return "homepage";
+            }
 		} catch (AdException e) {
 			System.out.println("Exception: " + e.getMessage());
 		}

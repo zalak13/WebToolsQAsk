@@ -15,7 +15,7 @@ public class UserDAO extends DAO {
 	public UserDAO() {
     }
 
-    public boolean checkUser(String email, String password)
+    public User checkUser(String email, String password)
             throws AdException {
         try {
             begin();
@@ -23,11 +23,7 @@ public class UserDAO extends DAO {
             q.setParameter("email", email);
             q.setParameter("password", password);
             User user = (User) q.uniqueResult();
-            System.out.println(user.getFirstName());
-            if(user!=null){
-            	return true;
-            }
-            return false;
+            return user;
         } catch (HibernateException e) {
             rollback();
             throw new AdException("Could not get user " + email, e);
