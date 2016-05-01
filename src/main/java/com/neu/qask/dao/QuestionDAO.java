@@ -2,12 +2,14 @@ package com.neu.qask.dao;
 
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
 import com.neu.qask.exception.AdException;
+import com.neu.qask.pojo.Answer;
 import com.neu.qask.pojo.Question;
 import com.neu.qask.pojo.Topic;
 import com.neu.qask.pojo.User;
@@ -22,8 +24,8 @@ public class QuestionDAO extends DAO {
             throws AdException {
         try {
             begin();
-            Query q = getSession().createQuery("from User where id = :questionID");
-            q.setLong("questionid", questionID);
+            Query q = getSession().createQuery("from Question where questionid = :questionID");
+            q.setParameter("questionID", questionID);
             Question question = (Question) q.uniqueResult();
             commit();
             return question;
@@ -60,6 +62,23 @@ public class QuestionDAO extends DAO {
         } catch (HibernateException e) {
             rollback();
             throw new AdException("Could not list the Questions", e);
+        }
+    }
+    
+    public void update(long questionId,Answer answer,User user) throws AdException {
+        try {
+            begin();
+            AnswerDAO answerdao = new AnswerDAO();
+            List<Answer> answerList = new ArrayList<Answer>();
+            answerList = answerdao.getAnswerList(questionId);
+            Question question = get(questionId);
+            question.getAnswerDetails().addAll(answerList);
+            getSession().update(question);
+            System.out.println("updated from here");
+            //commit();
+        } catch (HibernateException e) {
+            rollback();
+            throw new AdException("Could not update the question Answer list", e);
         }
     }
 

@@ -39,5 +39,12 @@ public class LoginUserController {
 		model.addAttribute("ErrorMsg", "Invalid Credentials");
 		return "index";
 	}
-
+	
+    @RequestMapping(value = "/logout.htm", method = RequestMethod.GET)
+    public String logout(HttpServletRequest request) {
+/*        HttpSession session = request.getSession();
+        session.invalidate();*/
+        return "index";
+    }
+	
 }

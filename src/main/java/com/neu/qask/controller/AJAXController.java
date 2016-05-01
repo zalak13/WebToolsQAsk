@@ -88,20 +88,32 @@ public class AJAXController {
 		List<Question> questionBank = new ArrayList<Question>();
 		JSONObject jsonResult = new JSONObject();
 		try {
-			JSONArray array = new JSONArray();
 			QuestionDAO questionDao = new QuestionDAO();
 			questionBank = questionDao.getQuestionlist();
+			JSONArray array = new JSONArray();
+			System.out.println(questionBank.size());
 			 for (Question question: questionBank) {
-				 System.out.println(question);
+				 
 	                JSONObject item = new JSONObject();
+	               /* for (Topic topic: question.getTopics()) {
+	                	JSONObject topicitems = new JSONObject();
+	                	topicitems.put("questionTopics",topic);
+	                }*/
+	                
+	                System.out.println(question.getAnswerDetails());
+	                System.out.println(question.getAnswerDetails().size());
+	                
+	                item.put("questionTopics", question.getTopics());
+	                item.put("questionId", question.getQuestionId());
 	                item.put("questionTitle", question.getTitle());
 	                item.put("questionDesc", question.getMessage());
 	                item.put("postedBy", question.getPostedBy());
-	                item.put("Answerdetails", question.getAnswerDetails());
+	               // item.put("Answerdetails", question.getAnswerDetails());
 	                array.put(item);
 	            }
 			 jsonResult.put("results", array);
 			 String message = jsonResult.toString();
+			 System.out.println(message);
 				PrintWriter out;
 	            if (message!="") {
 	                out = resp.getWriter();

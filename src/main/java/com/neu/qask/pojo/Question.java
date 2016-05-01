@@ -7,12 +7,14 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -53,11 +55,19 @@ public class Question {
 	@JoinColumn(name="user")
     private User user;*/
     
-    @Transient //
-    private Map<Answer,User> answerDetails; 
+	@OneToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+    private Set<Answer> answerDetails = new HashSet<Answer>(); 
     
 
-    public Question(String title, String message, User user) {
+    public String getPostedby() {
+		return postedby;
+	}
+
+	public void setPostedby(String postedby) {
+		this.postedby = postedby;
+	}
+
+	public Question(String title, String message, User user) {
         this.title = title;
         this.message = message;
         this.postedby = user.getUserName();
@@ -82,11 +92,11 @@ public class Question {
         this.title = title;
     }
 
-    protected long getQuestionId() {
+    public long getQuestionId() {
         return questionid;
     }
 
-    protected void setQuestionId(long id) {
+    public void setQuestionId(long id) {
         this.questionid = id;
     }
 
@@ -98,11 +108,14 @@ public class Question {
         this.postedby = pb;
     }
 
-	public Map<Answer, User> getAnswerDetails() {
+	public Set<Answer> getAnswerDetails() {
+		/*if(answerDetails==null){
+			new HashSet<Answer>();
+		}*/
 		return answerDetails;
 	}
 
-	public void setAnswerDetails(Map<Answer, User> answerDetails) {
+	public void setAnswerDetails(Set<Answer> answerDetails) {
 		this.answerDetails = answerDetails;
 	}
 

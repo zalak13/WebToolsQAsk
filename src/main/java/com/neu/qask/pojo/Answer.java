@@ -8,8 +8,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,9 +23,7 @@ import org.hibernate.annotations.Parameter;
 @Table(name="Answerbank")
 public class Answer {
 
-	@GenericGenerator(name="generator",strategy="foreign",parameters=@Parameter(name="property",value="user"))
-	@Id
-	@GeneratedValue(generator="generator")
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="answerid",unique=true,nullable=false)
     private long id;
 	
@@ -37,16 +37,22 @@ public class Answer {
 	@Column(name="postedTime") 
     private String postedTime;
 	
-    @OneToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+	@ManyToOne
+	@JoinColumn(name="questionid")
+	private Question question;
+	
+/*    @OneToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
 	@JoinColumn(name="user")
-    private User user;
+    private User user;*/
     
   
-    public Answer(String message, User user) {
+    public Answer(String message, String username) {
         this.message = message;
-        this.user = user;
-        this.postedBy = user.getUserName();
+        //this.user = user;
+        this.postedBy = username;
+        System.out.println("Here is the problem");
         this.postedTime = new Timestamp(new Date(id).getTime()).toString();
+        System.out.println("After the crash");
     }
 
     Answer() {
@@ -83,14 +89,23 @@ public class Answer {
 	public void setPostedTime(String postedTime) {
 		this.postedTime = postedTime;
 	}
+	
+	public Question getQuestion() {
+		return question;
+	}
 
-	public User getUser() {
+	public void setQuestion(Question question) {
+		this.question = question;
+	}
+
+	
+/*	public User getUser() {
 		return user;
 	}
 
 	public void setUser(User user) {
 		this.user = user;
-	}
+	}*/
 
     
 }
