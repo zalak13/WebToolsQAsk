@@ -8,15 +8,15 @@ Quora
 
 # What it does
 It gives a platform to ask and answer questions.
+Developed a web application in Eclipse (Java EE), where questions are asked, answered, edited and organized by users. User can select categories of discussion, create question threads and have discussion boards.
 
-# Challenges we ran into
+# Challenges faced
 Technology compatibility.
 
-# What we learned
-Develop a product overnight.
-
-# What's next for Travellophilia
+# What were the learnings
+Developed using the various web technolgies like Spring MVC, Hibernate framework using Annotations.
+Implemented the Apache Tiles Framwork in order to build page fragments which can be assembled into a complete page at runtime.
 
 
 # Built With
-spring, facebook, oauth, google-apis-discovery, mvc, javascript, mysql, json, bootstrap, css3, html5, eclipse, sts, maven, tomcat.
+spring mvc, hibernate, Apache tiles, javascript, mysql, json, bootstrap, css3, html5, eclipse, sts, maven, tomcat.
